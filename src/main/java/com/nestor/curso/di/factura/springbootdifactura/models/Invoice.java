@@ -3,6 +3,7 @@ package com.nestor.curso.di.factura.springbootdifactura.models;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -10,8 +11,11 @@ public class Invoice {
 
     @Autowired
     private Client client;
+
+    @Value("${invoice.description}")
     private String description;
 
+    @Autowired
     private List<Item> items;
 
     public Client getClient() {
@@ -33,4 +37,15 @@ public class Invoice {
         this.items = items;
     }
     
+    public int getTotal() {
+    //     int total = 0;
+    //     for(Item item: items){
+    //     total += item.getImporte();
+        
+    // }
+    
+    return items.stream()
+    .map(item->item.getImporte())
+    .reduce(0, (sum, importe) -> sum + importe);
+    }
 }
